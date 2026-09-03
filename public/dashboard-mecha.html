@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HARSON AI Platform - 机能风</title>
+  <link rel="stylesheet" href="/css/dashboard-mecha.css" />
+</head>
+
+<body data-page="dashboard">
+  <a href="/dashboard-black-gold" class="dashboard-style-switch" aria-label="切换到黑金风仪表盘">
+    切换到黑金风
+  </a>
+
+  <header class="dashboard-topbar">
+    <a href="/" class="dashboard-brand" title="返回首页">
+      <div class="logo-icon">H</div>
+      <div class="dashboard-logo-text">
+        <span class="dashboard-logo-main">HARSON</span>
+        <span class="dashboard-logo-sub">数智化平台</span>
+      </div>
+    </a>
+
+    <div class="dashboard-topbar-title">
+      <strong>CL-AIGC 企业数据仪表盘</strong>
+      <span>企业总体、主账号与子账号创作分析</span>
+    </div>
+
+    <div class="dashboard-topbar-actions">
+      <a class="dashboard-aigc-link" data-dashboard-aigc-entry href="/aigc">
+        进入 CL-AIGC
+      </a>
+
+      <button id="accountAvatar" class="account-avatar dashboard-account-button" type="button" title="退出登录">
+        <span id="accountAvatarText" class="account-avatar-text">U</span>
+        <span class="dashboard-account-action">退出</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="main">
+    <header class="header">
+      <h1>企业 Token 经营概览</h1>
+      <p>集中查看企业总体、主账号及子账号的真实消耗与创作记录</p>
+    </header>
+
+    <section class="stats" aria-label="平台概览">
+      <article class="stat-card">
+        <div class="stat-label">当前企业</div>
+        <div class="stat-value overview-text" id="overviewEnterprise">读取中</div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-label">有效子账号</div>
+        <div class="stat-value" id="overviewSubAccounts">0 个</div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-label">已同步创作任务</div>
+        <div class="stat-value" id="overviewTasks">0 次</div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-label">最近数据同步</div>
+        <div class="stat-value overview-sync" id="overviewSync">暂无同步</div>
+      </article>
+    </section>
+
+    <section class="apps-section">
+      <div class="section-title">核心应用模块</div>
+
+      <div class="apps-grid">
+        <article class="app-card aigc-launch-card" data-open-url="/aigc" title="点击进入 CL-AIGC token 采购页面">
+          <div class="app-header">
+            <div class="app-icon aigc">AI</div>
+            <div class="app-info">
+              <div class="app-name">CL-AIGC</div>
+              <div class="app-desc">时尚生成式AI · 品牌视觉引擎，支持图像、文案、视频与鞋款概念生成。该模块使用 token。</div>
+            </div>
+          </div>
+
+          <div class="app-status running">运行中</div>
+
+          <div class="app-actions">
+            <button class="btn btn-primary app-action-btn" data-action="start" data-app="CL-AIGC">启动</button>
+            <button class="btn btn-secondary app-action-btn" data-action="stop" data-app="CL-AIGC">停止</button>
+          </div>
+        </article>
+
+        <article class="app-card">
+          <div class="app-header">
+            <div class="app-icon scm">SC</div>
+            <div class="app-info">
+              <div class="app-name">CL-SCM</div>
+              <div class="app-desc">端到端智能供应链，覆盖供应商、订单、库存、物流与风险预警。该模块统计使用次数，不消耗 token。</div>
+            </div>
+          </div>
+
+          <div class="app-status running">运行中</div>
+
+          <div class="app-actions">
+            <button class="btn btn-primary app-action-btn" data-action="start" data-app="CL-SCM">启动</button>
+            <button class="btn btn-secondary app-action-btn" data-action="stop" data-app="CL-SCM">停止</button>
+          </div>
+        </article>
+
+        <article class="app-card">
+          <div class="app-header">
+            <div class="app-icon istore">iS</div>
+            <div class="app-info">
+              <div class="app-name">CL-iStore</div>
+              <div class="app-desc">数智化零售与体验，支持门店经营、会员运营、销售分析与客户洞察。该模块统计使用次数，不消耗 token。</div>
+            </div>
+          </div>
+
+          <div class="app-status running">运行中</div>
+
+          <div class="app-actions">
+            <button class="btn btn-primary app-action-btn" data-action="start" data-app="CL-iStore">启动</button>
+            <button class="btn btn-secondary app-action-btn" data-action="stop" data-app="CL-iStore">停止</button>
+          </div>
+        </article>
+
+        <article class="app-card">
+          <div class="app-header">
+            <div class="app-icon irobot">IR</div>
+            <div class="app-info">
+              <div class="app-name">CL-iRobot</div>
+              <div class="app-desc">自主移动与协作机器人，支持任务调度、路径规划与无人值守运行。该模块统计使用次数，不消耗 token。</div>
+            </div>
+          </div>
+
+          <div class="app-status stopped">已停止</div>
+
+          <div class="app-actions">
+            <button class="btn btn-primary app-action-btn" data-action="start" data-app="CL-iRobot">启动</button>
+            <button class="btn btn-secondary app-action-btn" data-action="stop" data-app="CL-iRobot">停止</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="analytics-section">
+      <div class="section-title">企业总体 · Token 使用分析</div>
+
+      <div class="analytics-toolbar">
+        <div>
+          <h3 id="enterpriseAnalyticsTitle">CL-AIGC Token 分析</h3>
+          <p id="dashboardDataMessage">正在读取真实 Token 数据...</p>
+        </div>
+
+        <div class="dashboard-toolbar-actions">
+          <span id="dashboardSyncStatus" class="dashboard-sync-status is-loading">正在读取</span>
+
+          <select id="dashboardMasterSelect" class="user-select" aria-label="选择企业主账号">
+            <option value="">读取中</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="analytics-summary-grid five-col">
+        <article class="analytics-card">
+          <div class="stat-label">CL-AIGC 最近同步余额</div>
+          <div class="stat-value" id="globalBalance">0 <span>tokens</span></div>
+        </article>
+
+        <article class="analytics-card">
+          <div class="stat-label">子账号总配额</div>
+          <div class="stat-value" id="globalAllocated">0 <span>tokens</span></div>
+        </article>
+
+        <article class="analytics-card">
+          <div class="stat-label">企业总净消耗</div>
+          <div class="stat-value" id="globalConsumed">0 <span>tokens</span></div>
+        </article>
+
+        <article class="analytics-card">
+          <div class="stat-label">子账号剩余配额</div>
+          <div class="stat-value" id="globalRemaining">0 <span>tokens</span></div>
+        </article>
+
+        <article class="analytics-card">
+          <div class="stat-label">企业总任务数</div>
+          <div class="stat-value" id="globalTasks">0 次</div>
+        </article>
+      </div>
+
+      <div class="chart-grid">
+        <article class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3>主账号与子账号 Token 净消耗</h3>
+              <p>按 CL-AIGC 真实任务的扣点减退点计算，方便比较各账号使用情况。</p>
+            </div>
+          </div>
+
+          <div class="bar-chart" id="subAccountUsageChart">
+            <p class="dashboard-empty-state">读取中...</p>
+          </div>
+        </article>
+
+        <article class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3>主账号与子账号 Token 消耗占比</h3>
+              <p>展示主账号及各子账号在企业净消耗中的占比。</p>
+            </div>
+          </div>
+
+          <div class="pie-layout">
+            <div class="css-pie age-pie" id="subAccountSharePie" aria-label="主账号与子账号 Token 消耗占比"></div>
+
+            <div class="legend-list" id="subAccountShareLegend">
+              <p class="dashboard-empty-state">读取中...</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="chart-card wide-chart-card">
+          <div class="chart-header">
+            <div>
+              <h3>近 7 天 Token 净消耗趋势</h3>
+              <p>按真实任务完成或创建日期汇总企业全部账号每天的 Token 净消耗。</p>
+            </div>
+          </div>
+
+          <div class="weekly-chart" id="weeklyTokenChart"></div>
+        </article>
+      </div>
+
+      <div class="account-detail-grid">
+        <article class="account-detail-panel">
+          <div class="account-detail-header">
+            <div>
+              <span class="account-detail-kicker">固定视角</span>
+              <h3>主账号数据</h3>
+              <p>仅展示企业主账号自己的真实创作任务。</p>
+            </div>
+
+            <span id="masterAccountStatus" class="account-status-chip">等待同步</span>
+          </div>
+
+          <div class="account-metric-grid four-col">
+            <div class="account-metric"><span>创作任务</span><strong id="masterTaskCount">0 次</strong></div>
+            <div class="account-metric"><span>CL-AIGC 扣点</span><strong id="masterDeducted">0</strong></div>
+            <div class="account-metric"><span>CL-AIGC 退点</span><strong id="masterRefunded">0</strong></div>
+            <div class="account-metric"><span>真实净消耗</span><strong id="masterConsumed">0</strong></div>
+          </div>
+
+          
+
+          <div class="task-record-header">
+            <h4>主账号创作记录</h4>
+            <span id="masterTaskRecordCount">0 条</span>
+          </div>
+
+          <div class="task-table-wrap">
+            <table class="task-record-table">
+              <thead><tr><th>创作任务</th><th>状态</th><th>扣点 / 退点</th><th>净消耗</th><th>时间</th></tr></thead>
+              <tbody id="masterTaskRecords"><tr><td colspan="5" class="task-empty-cell">正在读取...</td></tr></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="account-detail-panel">
+          <div class="account-detail-header">
+            <div>
+              <span class="account-detail-kicker">可切换视角</span>
+              <h3>子账号数据</h3>
+              <p>切换账号后，指标和创作记录会同时更新。</p>
+            </div>
+
+            <select id="localUserSelect" class="user-select" aria-label="选择子账号">
+              <option value="">读取中</option>
+            </select>
+          </div>
+
+          <div class="account-metric-grid five-col">
+            <div class="account-metric"><span>内部配额</span><strong id="localLimit">0</strong></div>
+            <div class="account-metric"><span>CL-AIGC 扣点</span><strong id="localDeducted">0</strong></div>
+            <div class="account-metric"><span>CL-AIGC 退点</span><strong id="localRefunded">0</strong></div>
+            <div class="account-metric"><span>真实净消耗</span><strong id="localConsumed">0</strong></div>
+            <div class="account-metric"><span>剩余配额</span><strong id="localRemaining">0</strong></div>
+          </div>
+
+      
+
+          <div class="task-record-header">
+            <h4>子账号创作记录</h4>
+            <span id="subTaskRecordCount">0 条</span>
+          </div>
+
+          <div class="task-table-wrap">
+            <table class="task-record-table">
+              <thead><tr><th>创作任务</th><th>状态</th><th>扣点 / 退点</th><th>净消耗</th><th>时间</th></tr></thead>
+              <tbody id="subTaskRecords"><tr><td colspan="5" class="task-empty-cell">正在读取...</td></tr></tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
