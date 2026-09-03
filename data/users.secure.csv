@@ -1,0 +1,2 @@
+id,name,email,passwordHash,role,gender,ageGroup,createdAt,lastLoginAt,isActive
+svs5BT9eDKKb_SQR,Depp,deppli@qq.com,$2a$12$he0apbIPabA/f1SXsQn78e9sd9ejSgJ7B.rjgAypyJouya0YmlF.q,user,Male,21-30,2026-09-01T01:39:31.915Z,,true
