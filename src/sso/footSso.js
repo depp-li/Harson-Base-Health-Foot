@@ -18,6 +18,11 @@ const crypto = require("crypto");
  *  - HMAC-SHA256 签名防止内容被篡改/伪造（密钥仅存在于两端服务器）。
  *  - exp 短有效期（默认 60 秒）防止长期重放。
  *  - aud 固定为 "harson-foot"，HarsonFOOT 侧校验，防止票据被用于别处。
+ *
+ * 对端实现说明（已实测确认）：
+ *  HarsonFOOT 为 ASP.NET Core 应用，/api/auth/sso-login 缺少参数时返回
+ *  400 application/problem+json（errors.p / errors.sig 必填）；
+ *  验签失败时重定向到 /login?error=sso_invalid。
  */
 
 const DEFAULT_TTL_SECONDS = 60;

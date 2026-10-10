@@ -119,6 +119,7 @@ export const platformModel = {
       description: "面向连锁门店、品牌零售和线上线下一体化运营，支持门店分析、会员运营与全渠道转化提升。",
       badge: "智慧零售",
       actionLabel: "查看零售能力",
+      link: "/cl-istore.html",
       icon: "fas fa-store",
       badgeIcon: "fas fa-chart-line",
       features: [
@@ -149,6 +150,7 @@ export const platformModel = {
       id: "foot-measure",
       title: "3D 足型测量",
       ssoUrl: "/api/sso/foot-entry",
+      externalUrl: "https://harson-base-health.com",
       subtitle: "3D 足测数据采集与分析平台",
       description: "面向门店与客户，支持足型三维扫描、测量数据管理与数字鞋楦，帮助门店提供个性化选鞋服务。",
       badge: "足测数智",

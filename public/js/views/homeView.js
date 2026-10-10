@@ -37,72 +37,74 @@ export class HomeView {
   }
 
   platformTemplate(platform) {
-    const platformTitle = platform.link
-      ? `<a href="${platform.link}">${platform.title}</a>`
-      : platform.title;
+    const appMeta = {
+      "cl-aigc": {
+        title: "CL-AIGC",
+        tagline: "创意生成",
+        link: "/aigc-workspace"
+      },
 
-    let actionButton;
-    if (platform.ssoUrl) {
-      actionButton = `
-        <a class="platform-action sso-entry" href="${platform.ssoUrl}" data-sso-url="${platform.ssoUrl}">
-          ${platform.actionLabel || "进入平台"} <i class="fas fa-arrow-right"></i>
-        </a>
-      `;
-    } else if (platform.link) {
-      actionButton = `
-        <a class="platform-action" href="${platform.link}">
-          ${platform.actionLabel || "进入平台"} <i class="fas fa-arrow-right"></i>
-        </a>
-      `;
-    } else {
-      actionButton = `
-        <a class="platform-action" href="#${platform.id}">
-          ${platform.actionLabel || "查看能力"} <i class="fas fa-arrow-right"></i>
-        </a>
-      `;
+      "cl-scm": {
+        title: "CL-SCM",
+        tagline: "供应协同",
+        link: "#cl-scm"
+      },
+
+      "cl-irobot": {
+        title: "CL-iRobot",
+        tagline: "自动化执行",
+        link: "#cl-irobot"
+      },
+
+      "cl-istore": {
+        title: "CL-iStore",
+        tagline: "零售体验",
+        link: "#cl-istore"
+      },
+
+      "foot-measure": {
+        title: "3D 足型测量",
+        tagline: "足测数智",
+        link: "https://harson-base-health.com",
+        ssoUrl: "/api/sso/foot-entry"
+      }
+    };
+
+    const app = appMeta[platform.id];
+
+    if (!app) {
+      return "";
     }
 
     return `
-      <article class="platform-card platform-product-card" id="${platform.id}">
-        <div class="platform-product-info">
-          <div class="platform-product-top">
-            <div class="platform-icon">
-              <i class="${platform.icon}"></i>
-            </div>
+      <article
+        class="featured-app-card featured-app-${platform.id}"
+        id="${platform.id}"
+      >
+        <div class="featured-app-copy">
+    
 
-            <div class="platform-product-heading">
-              <h2>${platformTitle}</h2>
-              <p>${platform.subtitle}</p>
-            </div>
-          </div>
+          <h3>${app.title}</h3>
 
-          <p class="platform-description">
-            ${platform.description || ""}
-          </p>
-
-          <div class="platform-meta-row">
-            <span class="platform-badge">
-              <i class="${platform.badgeIcon}"></i> ${platform.badge}
-            </span>
-          </div>
-
-          ${actionButton}
+          <p>${app.tagline}</p>
         </div>
 
-        <div class="feature-list">
-          ${platform.features.map(feature => `
-            <div class="feature-item" data-feature="${feature[0]}">
-              <div class="feature-icon">
-                <i class="${feature[2]}"></i>
-              </div>
+        <div
+          class="featured-app-visual"
+          aria-hidden="true"
+        ></div>
 
-              <div class="feature-text">
-                <strong>${feature[0]}</strong>
-                <span>${feature[1]}</span>
-              </div>
-            </div>
-          `).join("")}
-        </div>
+        <a
+          class="featured-app-link"
+          href="${app.link}"${
+            app.ssoUrl
+              ? ` data-sso-url="${app.ssoUrl}" data-sso-external="${app.link}"`
+              : ""
+          }
+        >
+          探索 ${app.title}
+          <i class="fas fa-arrow-right"></i>
+        </a>
       </article>
     `;
   }
@@ -183,14 +185,15 @@ export class HomeView {
   }
 
   /**
-   * 绑定 SSO 跳转入口（如「3D 足型测量」卡片）。
+   * 绑定 SSO 免登录跳转入口（如「3D 足型测量」卡片）。
    *
    * 点击后请求同源接口 /api/sso/foot-entry：
-   *  - 已登录：接口返回免登录跳转 URL，浏览器整页跳转到目标系统。
+   *  - 已登录：接口返回带签名的免登录跳转 URL，整页跳转到目标平台。
    *  - 未登录：接口返回 401，跳转到本系统登录页。
+   *  - 接口异常 / 未配置：降级为直接打开目标平台官网。
    */
   bindSsoEntries() {
-    const ssoLinks = document.querySelectorAll(".platform-action[data-sso-url]");
+    const ssoLinks = document.querySelectorAll("[data-sso-url]");
 
     if (!ssoLinks.length) {
       return;
@@ -202,6 +205,9 @@ export class HomeView {
         event.stopPropagation();
 
         const ssoUrl = link.dataset.ssoUrl;
+        const fallbackUrl = link.dataset.ssoExternal || link.getAttribute("href");
+        const isValidAbsolute =
+          typeof fallbackUrl === "string" && /^https?:\/\//i.test(fallbackUrl);
 
         try {
           const response = await fetch(ssoUrl, {
@@ -224,9 +230,22 @@ export class HomeView {
             return;
           }
 
+          console.warn("SSO 跳转接口返回异常，降级为直接跳转", result);
+
+          if (isValidAbsolute) {
+            window.location.href = fallbackUrl;
+            return;
+          }
+
           alert((result && result.message) || "跳转失败，请稍后重试或直接登录目标系统。");
         } catch (error) {
           console.error("SSO 跳转失败", error);
+
+          if (isValidAbsolute) {
+            window.location.href = fallbackUrl;
+            return;
+          }
+
           alert("跳转失败，请稍后重试或直接登录目标系统。");
         }
       });
