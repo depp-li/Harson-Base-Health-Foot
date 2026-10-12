@@ -178,6 +178,20 @@ app.get(
   }
 );
 
+app.get(
+  [
+    "/rfid-inventory",
+    "/rfid-inventory.html"
+  ],
+  (req, res) => {
+    return sendAuthenticatedPage(
+      req,
+      res,
+      "rfid-inventory.html"
+    );
+  }
+);
+
 app.use(express.static(path.join(__dirname, "public")));
 
 function sendAdminOnlyPage(req, res, filename) {
