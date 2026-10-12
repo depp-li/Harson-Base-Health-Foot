@@ -11,18 +11,28 @@ const crypto = require("crypto");
  *     /api/auth/sso-login?p=<base64url>&sig=<hex>，由 HarsonFOOT
  *     使用共享密钥本地验签，验证通过后签发它自己的登录凭证。
  *
- * 票据内容（base64url 编码的 JSON）：
- *  { sub, email, name, role, aud: "harson-foot", exp }
+ * 票据内容（base64url 编码的 JSON，字段名必须与对端 DTO 同名）：
+ *  { Sub, Email, Name, Role, Aud: "harson-foot", Exp }
  *
  * 安全性：
  *  - HMAC-SHA256 签名防止内容被篡改/伪造（密钥仅存在于两端服务器）。
- *  - exp 短有效期（默认 60 秒）防止长期重放。
- *  - aud 固定为 "harson-foot"，HarsonFOOT 侧校验，防止票据被用于别处。
+ *  - Exp 短有效期（默认 60 秒）防止长期重放。
+ *  - Aud 固定为 "harson-foot"，HarsonFOOT 侧校验，防止票据被用于别处。
  *
- * 对端实现说明（已实测确认）：
- *  HarsonFOOT 为 ASP.NET Core 应用，/api/auth/sso-login 缺少参数时返回
- *  400 application/problem+json（errors.p / errors.sig 必填）；
- *  验签失败时重定向到 /login?error=sso_invalid。
+ * 对端实现说明（对照 HarsonFOOT 源码 + 实测确认，2026-10-12）：
+ *  HarsonFOOT（ASP.NET Core 8）backend/Services/SsoTicketService.cs 的校验规则：
+ *   1. sig 是 hmacsha256(key, p) 的**大写十六进制**字符串
+ *      （对端用 Convert.ToHexString，再做常量时间比较且区分大小写）。
+ *   2. p 解码后的 JSON 直接反序列化到 SsoIdentity 类，
+ *      JsonSerializer.Deserialize 默认**区分大小写**，
+ *      所以字段名必须是 PascalCase 的 Sub/Email/Name/Role/Aud/Exp；
+ *      若用小写会全部落空（Aud 变成空串），最终报 sso_invalid。
+ *   3. 校验通过后 302 到 /sso/callback?token=...&role=...；
+ *      失败一律 302 /login?error=sso_invalid；
+ *      缺少 p/sig 时返回 400 application/problem+json。
+ *
+ *  注意：对端 SSO_INTEGRATION.md 里写的 payload 是小写字段名，与其实现不符，
+ *  以源码/实测为准（小写字段名实测必然失败）。
  */
 
 const DEFAULT_TTL_SECONDS = 60;
@@ -36,7 +46,8 @@ function computeSignature(encodedPayload, secret) {
   return crypto
     .createHmac("sha256", secret)
     .update(encodedPayload, "utf8")
-    .digest("hex");
+    .digest("hex")
+    .toUpperCase();
 }
 
 /**
@@ -55,13 +66,15 @@ function createFootSsoUrl(user) {
     return null;
   }
 
+  // 字段名必须是 PascalCase：对端 JsonSerializer.Deserialize 默认区分大小写，
+  // 小写键名会导致 Aud 落空并被判为 sso_invalid。
   const payload = {
-    sub: String(user?.id || ""),
-    email: String(user?.email || "").toLowerCase(),
-    name: String(user?.name || user?.email || ""),
-    role: String(user?.role || "user"),
-    aud: EXPECTED_AUDIENCE,
-    exp: Math.floor(Date.now() / 1000) + ttlSeconds
+    Sub: String(user?.id || ""),
+    Email: String(user?.email || "").toLowerCase(),
+    Name: String(user?.name || user?.email || ""),
+    Role: String(user?.role || "user"),
+    Aud: EXPECTED_AUDIENCE,
+    Exp: Math.floor(Date.now() / 1000) + ttlSeconds
   };
 
   const encodedPayload = base64UrlEncode(JSON.stringify(payload));
