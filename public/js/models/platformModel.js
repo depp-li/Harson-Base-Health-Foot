@@ -8,7 +8,6 @@ export const platformModel = {
     { label: "CL-SCM", href: "#cl-scm" },
     { label: "CL-iRobot", href: "#cl-irobot" },
     { label: "CL-iStore", href: "#cl-istore" },
-    { label: "CL足测", href: "#foot-measure" },
     { label: "生态合作", href: "#ecosystem" }
   ],
 
@@ -145,9 +144,7 @@ export const platformModel = {
           "fas fa-shopping-cart"
         ]
       ]
-    },
-
-    
+    }
   ],
 
   insights: [
