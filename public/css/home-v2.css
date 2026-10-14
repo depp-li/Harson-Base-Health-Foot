@@ -2645,3 +2645,64 @@ body.home-v2.reveal-ready
 
 
 }
+
+/* =========================================================
+   Hero 文案可读性优化
+   ========================================================= */
+
+/* 保证 Hero 内容在遮罩上方 */
+body.home-v2 .v2-hero {
+  position: relative;
+  isolation: isolate;
+}
+
+
+/* 只加强左侧文字区域，不影响右侧主视觉 */
+body.home-v2 .v2-hero::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.48) 0%,
+      rgba(0, 0, 0, 0.34) 28%,
+      rgba(0, 0, 0, 0.12) 48%,
+      rgba(0, 0, 0, 0) 65%
+    );
+}
+
+
+/* Hero 内容保持最上层 */
+body.home-v2 .v2-hero .hero-grid {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* 红框正文 */
+body.home-v2 .v2-hero .hero-content p {
+  max-width: 680px;
+
+  margin-top: 26px;
+
+  color:
+    rgba(255, 255, 255, 0.82);
+
+  font-size: 18px;
+
+  line-height: 1.75;
+
+  font-weight: 400;
+
+  letter-spacing: 0.01em;
+
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.75);
+}
